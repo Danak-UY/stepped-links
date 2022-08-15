@@ -11,8 +11,8 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "open-stepped-link",
-      "title": "Show steps",
+      "name": "openSteppedLink",
+      "title": "Search stepped link",
       "description": "Template for showing a static list",
       "mode": "view"
     }
@@ -32,7 +32,7 @@
       "type": "textfield",
       "required": false,
       "title": "Query wildcard",
-      "default": "%q"
+      "default": "{{q}}"
     },
     {
       "name": "defaultBrowser",
@@ -40,6 +40,13 @@
       "type": "appPicker",
       "required": true,
       "title": "Default browser"
+    },
+    {
+      "name": "defaultConfigApp",
+      "description": "Default app to edit config file",
+      "type": "appPicker",
+      "required": false,
+      "title": "Default config app"
     }
   ],
   "dependencies": {
