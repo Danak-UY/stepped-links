@@ -1,11 +1,25 @@
-export default class Step {
-  constructor(step) {
+import StepTypes from '../types/Step';
+
+// interface StepConstructor {
+//   step: string;
+//   data: object;
+// }
+
+export default class Step implements StepTypes {
+  name: string;
+  url: string;
+  hasSearch: boolean;
+  icon: string;
+  step: string;
+  insideSteps: number;
+
+  constructor(step: string, data: object) {
     console.log(step);
-    this.name = step._name;
-    this.url = step._url;
-    this.hasSearch = Boolean(step._search);
-    this.icon = 'create icon';
-    this.step = 'set next step';
-    this.insideStems = 'build inside steps';
+    this.name = step;
+    this.url = data._url;
+    this.hasSearch = Boolean(data._search);
+    this.icon = 'Folder';
+    this.step = step;
+    this.insideSteps = Object.values(data).length;
   }
 }

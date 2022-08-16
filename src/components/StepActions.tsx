@@ -1,17 +1,23 @@
 import { ActionPanel, Action, Icon, open, openExtensionPreferences } from '@raycast/api';
 import { Action$ } from 'raycast-toolkit';
 
-export default function StepActions() {
+interface StepActionsTypes {
+  url: string;
+  name: string;
+}
+
+export default function StepActions(props: StepActionsTypes) {
+  const { url, name } = props;
   return (
     <ActionPanel>
       <ActionPanel.Section title="Default actions">
-        <Action.OpenInBrowser url={`https://www.pokemon.com/`} />
+        <Action.OpenInBrowser url={url} />
         <Action
           title="Open in Firefox"
-          onAction={() => console.log(`https://www.pokemon.com/`, 'org.mozilla.firefox')}
+          onAction={() => console.log(url, 'org.mozilla.firefox')}
           shortcut={{ modifiers: ['cmd'], key: 't' }}
         />
-        <Action.CopyToClipboard content={item.title} />
+        <Action.CopyToClipboard content={name} />
         <Action$.SelectFile
           title="Select a csv"
           prompt="Select a .json file"
@@ -25,22 +31,22 @@ export default function StepActions() {
       >
         <Action
           title="Open in Firefox"
-          onAction={() => open(`https://www.pokemon.com/`, 'org.mozilla.firefox')}
+          onAction={() => open(url, 'org.mozilla.firefox')}
           shortcut={{ modifiers: ['cmd'], key: 'f' }}
         />
         <Action
           title="Open in Edge"
-          onAction={() => open(`https://www.pokemon.com/`, 'com.microsoft.edgemac')}
+          onAction={() => open(url, 'com.microsoft.edgemac')}
           shortcut={{ modifiers: ['cmd'], key: 'e' }}
         />
         <Action
           title="Open in Safari"
-          onAction={() => open(`https://www.pokemon.com/`, 'com.apple.Safari')}
+          onAction={() => open(url, 'com.apple.Safari')}
           shortcut={{ modifiers: ['cmd'], key: 's' }}
         />
         <Action
           title="Open in Brave"
-          onAction={() => open(`https://www.pokemon.com/`, 'com.brave.Browser')}
+          onAction={() => open(url, 'com.brave.Browser')}
           shortcut={{ modifiers: ['cmd'], key: 'b' }}
         />
       </ActionPanel.Submenu>
