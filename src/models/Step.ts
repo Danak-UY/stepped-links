@@ -13,13 +13,12 @@ export default class Step implements StepTypes {
   step: string;
   insideSteps: number;
 
-  constructor(step: string, data: object) {
-    console.log(step);
-    this.name = step;
-    this.url = data._url;
+  constructor(step: string | null, data: object | string) {
+    this.name = step ?? 'Undefined name';
+    this.url = data._url ?? 'Undefined url';
     this.hasSearch = Boolean(data._search);
     this.icon = 'Folder';
-    this.step = step;
+    this.step = step ?? 'Undefined step';
     this.insideSteps = Object.values(data).length;
   }
 }

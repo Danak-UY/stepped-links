@@ -19,7 +19,7 @@ export default function StepItem(props: StepTypes) {
       icon={{ tooltip: 'test', source: Icon[icon] }}
       title={step}
       subtitle={name || url}
-      accessories={[{ text: name, tooltip: 'Just Do It!' }]}
+      accessories={[{ text: url, tooltip: 'Just Do It!' }]}
       actions={<StepActions url={url} name={name} />}
     />
   );

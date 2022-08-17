@@ -7,22 +7,37 @@ export function getFinalStep(routes: object, steps: string[] = []) {
   }
 
   let lastRoute: object | string | string[] | undefined = routes;
-  const currentSteps = [];
+  let lastStep = '';
+  const stepsTraveled = [];
+  const namesFound: string[] = [];
 
-  steps.forEach((step: string) => {
+  for (const step of steps) {
     if (!lastRoute) {
-      return console.log('No route');
+      break;
     }
 
     const stepRoute: object | string | string[] | undefined = lastRoute[step];
 
-    currentSteps.push(step);
-    lastRoute = stepRoute;
-  });
+    if (stepRoute?._name) {
+      namesFound.push(stepRoute._name);
+    }
 
-  return lastRoute;
+    stepsTraveled.push(step);
+    lastRoute = stepRoute;
+    lastStep = step;
+  }
+
+  return { lastRoute, namesFound, lastStep, stepsTraveled };
 }
 
-export function parseSteps(steps: object): StepTypes[] {
+export function parseSteps(steps: object | string | string[] | undefined = {}): StepTypes[] {
+  if (!steps) {
+    return [];
+  }
+
+  if (typeof steps === 'string' || Array.isArray(steps)) {
+    return [new Step(null, steps)];
+  }
+
   return Object.entries(steps).map(([step, data]) => new Step(step, data));
 }

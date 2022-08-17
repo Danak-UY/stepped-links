@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React from 'react';
 import { List } from '@raycast/api';
 
 import StepTypes from '../types/Step';
@@ -7,18 +7,19 @@ import StepItem from './StepItem';
 
 interface StepsListTypes {
   steps: StepTypes[];
+  traveled: string[];
 }
 
-export default function StepsList({ steps }: StepsListTypes) {
-  useEffect(() => {
-    console.log('StepsList', steps);
-  }, [steps]);
+export default function StepsList({ steps, traveled = [] }: StepsListTypes) {
+  const listTitle = traveled.join(' › ');
+
+  const Wrapper = listTitle ? List.Section : React.Fragment;
 
   return (
-    <List.Section title="Lager › Github">
+    <Wrapper title={listTitle}>
       {steps.map((step: StepTypes) => (
         <StepItem {...step} />
       ))}
-    </List.Section>
+    </Wrapper>
   );
 }

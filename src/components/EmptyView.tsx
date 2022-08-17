@@ -1,11 +1,12 @@
 import { ActionPanel, Action, Icon, List, openExtensionPreferences } from '@raycast/api';
 import { Action$ } from 'raycast-toolkit';
 
-export default function EmptyView() {
+export default function EmptyView({ stepsTraveled = [] }) {
+  const route = stepsTraveled.join(' › ');
   return (
     <List.EmptyView
       icon={Icon.Airplane}
-      title="Type something to get started"
+      title={`Step for route '${route}' not found`}
       actions={
         <ActionPanel>
           <ActionPanel.Section title="Default actions">
