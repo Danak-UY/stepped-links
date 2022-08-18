@@ -1,7 +1,7 @@
 import { Icon } from '@raycast/api';
 
 interface StepIcon {
-  type: Icon;
+  type: string;
 }
 
 /**

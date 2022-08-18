@@ -9,18 +9,20 @@ interface StepItemTypes {
 }
 
 export default function StepItem(props: StepTypes) {
-  const { name, url, hasSearch, icon, step, insideSteps } = props;
+  const { title, subtitle, url, hasSearch, icon, insideSteps } = props;
+
+  const rightIcon = hasSearch ? { icon: Icon.MagnifyingGlass } : {};
 
   return (
     <List.Item
-      key={name}
+      key={title}
       // icon={getFavicon("https://dev.mercadopago.com.ar")}
       // icon={{ tooltip: 'test', source: Icon[item.icon], tintColor: Color.Blue }}
-      icon={{ tooltip: 'test', source: Icon[icon] }}
-      title={step}
-      subtitle={name || url}
-      accessories={[{ text: url, tooltip: 'Just Do It!' }]}
-      actions={<StepActions url={url} name={name} />}
+      icon={{ source: icon }}
+      title={title ?? 'component empty'}
+      subtitle={subtitle}
+      accessories={[rightIcon]}
+      actions={<StepActions url={url} name={title} />}
     />
   );
 }
