@@ -1,5 +1,4 @@
-import { ActionPanel, Action, Icon, open, openExtensionPreferences } from '@raycast/api';
-import { Action$ } from 'raycast-toolkit';
+import { ActionPanel, Action, Icon, open, openCommandPreferences } from '@raycast/api';
 
 interface StepActionsTypes {
   url: string;
@@ -10,25 +9,26 @@ export default function StepActions(props: StepActionsTypes) {
   const { url, name } = props;
   return (
     <ActionPanel>
-      <ActionPanel.Section title="Default actions">
+      <ActionPanel.Section>
         <Action.OpenInBrowser url={url} />
+        <Action.CopyToClipboard content={url} shortcut={{ modifiers: ['cmd'], key: 'enter' }} />
         <Action
-          title="Open in Firefox"
-          onAction={() => console.log(url, 'org.mozilla.firefox')}
-          shortcut={{ modifiers: ['cmd'], key: 't' }}
-        />
-        <Action.CopyToClipboard content={name} />
-        <Action$.SelectFile
-          title="Select a csv"
-          prompt="Select a .json file"
-          onSelect={(path) => console.log('Selected file at path:', path)}
+          title="Open Command Preferences"
+          onAction={openCommandPreferences}
+          icon={Icon.Cog}
+          shortcut={{ modifiers: ['cmd'], key: 'p' }}
         />
       </ActionPanel.Section>
       <ActionPanel.Submenu
         title="Other borwsers"
-        icon={Icon.Alarm}
+        icon={Icon.AppWindow}
         shortcut={{ modifiers: ['cmd'], key: 'arrowRight' }}
       >
+        <Action
+          title="Open in Chrome"
+          onAction={() => open(url, 'org.google.chrome')}
+          shortcut={{ modifiers: ['cmd'], key: 'g' }}
+        />
         <Action
           title="Open in Firefox"
           onAction={() => open(url, 'org.mozilla.firefox')}
@@ -50,7 +50,6 @@ export default function StepActions(props: StepActionsTypes) {
           shortcut={{ modifiers: ['cmd'], key: 'b' }}
         />
       </ActionPanel.Submenu>
-      <Action title="Open Extension Preferences" onAction={openExtensionPreferences} />
     </ActionPanel>
   );
 }
