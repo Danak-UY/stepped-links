@@ -11,9 +11,27 @@
   "license": "MIT",
   "commands": [
     {
+      "name": "createStepForm",
+      "title": "Create New Step",
+      "description": "Create new step",
+      "mode": "view"
+    },
+    {
+      "name": "importStepsConfig",
+      "title": "Import Steps Config",
+      "description": "Import json file with stepped links",
+      "mode": "no-view"
+    },
+    {
+      "name": "exportStepsConfig",
+      "title": "Export Steps Config",
+      "description": "Export json file with stepped links",
+      "mode": "no-view"
+    },
+    {
       "name": "openSteppedLink",
       "title": "Search stepped link",
-      "description": "Template for showing a static list",
+      "description": "Search and open a link",
       "mode": "view"
     }
   ],
@@ -52,6 +70,7 @@
   "dependencies": {
     "@raycast/api": "^1.38.3",
     "@raycast/utils": "^1.1.0",
+    "lodash": "^4.17.21",
     "raycast-toolkit": "^1.0.6",
     "run-applescript": "^6.0.0"
   },
