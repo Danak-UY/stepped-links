@@ -43,7 +43,7 @@ export function parseSteps(steps: object | string | string[] | undefined = {}): 
 
   const { _url, _search, _name, ...restSteps } = steps;
 
-  console.log('steps', steps, restSteps);
+  // console.log('steps', steps, restSteps);
 
   const rootStep = buildRootStep(_url, _search, _name, restSteps);
   const parsedSteps = Object.entries(restSteps)
