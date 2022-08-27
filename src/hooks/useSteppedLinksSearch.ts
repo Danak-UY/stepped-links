@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useReducer } from 'react';
 
 import { getFinalStep } from '../helpers/steps';
 

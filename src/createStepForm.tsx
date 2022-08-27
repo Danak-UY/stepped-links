@@ -1,8 +1,9 @@
-import { Form, ActionPanel, Action } from '@raycast/api';
-import { useState } from 'react';
+import { Form, ActionPanel, Action, showToast, Toast } from '@raycast/api';
+import { useState, useEffect } from 'react';
 
 import Storage from './services/storage';
 import { merge } from 'lodash';
+import Feedback from './services/feedback';
 
 const buildPath = (path, content) => {
   return {
@@ -28,19 +29,42 @@ const buildStepPath = ({ path, url, name, search }) => {
 };
 
 const addStepToStorage = async (step) => {
-  const stepPath = buildStepPath(step);
-  // console.log('file', stepPath);
+  try {
+    Feedback.toast('Saving new step', Toast.Style.Animated);
+    const stepPath = buildStepPath(step);
+    // console.log('file', stepPath);
 
-  const stepsInfo = await Storage.getItem('steppedRoutes', {});
+    const stepsInfo = await Storage.getItem('steppedRoutes', {});
 
-  merge(stepsInfo, stepPath);
-  return await Storage.setItem('steppedRoutes', stepsInfo);
+    merge(stepsInfo, stepPath);
+    await Storage.setItem('steppedRoutes', stepsInfo);
+
+    Feedback.toast('Step created', Toast.Style.Success);
+  } catch (e) {
+    console.error(e);
+    Feedback.toast('There was a problem saving step', Toast.Style.Failure);
+  }
 };
 
-export default function CreateStepForm({ test }) {
-  console.log('props', { test });
-  const [hasSearch, setHasSearch] = useState(false);
+export default function CreateStepForm({ path, name, url, search }) {
+  const [hasSearch, setHasSearch] = useState(Boolean(search));
   const [isLoading, setIsLoading] = useState(false);
+
+  const [stepInfo, setStepInfo] = useState({
+    path,
+    name,
+    url,
+    search,
+  });
+
+  useEffect(() => {
+    setStepInfo({
+      path,
+      name,
+      url,
+      search,
+    });
+  }, [path, name, url, search]);
 
   const handleSubmit = async (values) => {
     setIsLoading(true);
@@ -57,22 +81,37 @@ export default function CreateStepForm({ test }) {
         </ActionPanel>
       }
     >
-      <Form.TextField id="path" autoFocus info="Path to search for the link" defaultValue="ry docs" title="Path" />
+      <Form.TextField
+        id="path"
+        autoFocus
+        info="Path to search for the link"
+        placeholder="ry docs"
+        defaultValue={stepInfo.path}
+        title="Path"
+      />
 
-      <Form.TextField id="name" info="Name of the link" defaultValue="Raycast" title="Name" />
+      <Form.TextField
+        id="name"
+        info="Name of the link"
+        defaultValue={stepInfo.name}
+        title="Name"
+        placeholder="Raycast Docs"
+      />
       <Form.TextField
         id="url"
         info="Url to be oppened"
-        defaultValue="https://developers.raycast.com/api-reference/"
+        defaultValue={stepInfo.url}
         title="Url"
+        placeholder="https://developers.raycast.com/api-reference/"
       />
       <Form.Checkbox id="hasSearch" label="Add search" title="Add search" value={hasSearch} onChange={setHasSearch} />
       {hasSearch && (
         <Form.TextField
           id="search"
           info="Search to be oppened"
-          defaultValue="https://developers.raycast.com/api-reference/{{q}}"
+          defaultValue={stepInfo.search}
           title="Search"
+          placeholder="https://developers.raycast.com/api-reference/{{q}}"
         />
       )}
     </Form>

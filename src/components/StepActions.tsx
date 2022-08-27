@@ -15,7 +15,7 @@ export default function StepActions(props: StepActionsTypes) {
         <Action.CopyToClipboard content={url} shortcut={{ modifiers: ['cmd'], key: 'enter' }} />
         <Action.Push
           title="Edit step"
-          target={<CreateStepForm test="This prop comes from navigation" />}
+          target={<CreateStepForm {...props} />}
           shortcut={{ modifiers: ['opt'], key: 'enter' }}
         />
         <Action

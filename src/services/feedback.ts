@@ -5,7 +5,7 @@ export default class Feedback {
     showHUD(title);
   }
 
-  static async toast(title: string, message = '', style: Toast.Style = Toast.Style.Success): Promise<Toast> {
+  static async toast(title: string, style: Toast.Style = Toast.Style.Success, message = ''): Promise<Toast> {
     return await showToast({
       title,
       message,
