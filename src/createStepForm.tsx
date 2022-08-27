@@ -29,22 +29,28 @@ const buildStepPath = ({ path, url, name, search }) => {
 
 const addStepToStorage = async (step) => {
   const stepPath = buildStepPath(step);
-  console.log('file', stepPath);
+  // console.log('file', stepPath);
 
   const stepsInfo = await Storage.getItem('steppedRoutes', {});
 
   merge(stepsInfo, stepPath);
-  await Storage.setItem('steppedRoutes', stepsInfo);
+  return await Storage.setItem('steppedRoutes', stepsInfo);
 };
 
-export default function CreateStepForm() {
+export default function CreateStepForm({ test }) {
+  console.log('props', { test });
   const [hasSearch, setHasSearch] = useState(false);
-  const handleSubmit = (values) => {
-    addStepToStorage(values);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (values) => {
+    setIsLoading(true);
+    await addStepToStorage(values);
+    setIsLoading(false);
   };
 
   return (
     <Form
+      isLoading={isLoading}
       actions={
         <ActionPanel>
           <Action.SubmitForm title="Create new step" onSubmit={handleSubmit} />
