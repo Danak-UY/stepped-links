@@ -1,0 +1,21 @@
+{
+  "gh": {
+    "_name": "GitHub",
+    "_url": "https://github.com",
+    "_search": "https://duckduckgo.com/?q=%s&t=%s",
+    "ry": {
+      "_name": "Raycast",
+      "_url": "https://github.com/raycast",
+      "scripts": "https://github.com/raycast/script-commands"
+    }
+  },
+  "ry": {
+    "_name": "Raycast",
+    "_url": "https://raycast.io/"
+  },
+  "gg": {
+    "_url": "https://google.com",
+    "_search": "https://google.com/search?q={{q}}",
+    "img": "https://google.com/search?q={{q}}&tbm=isch"
+  }
+}
