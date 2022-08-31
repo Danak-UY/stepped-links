@@ -1,4 +1,5 @@
 import { ActionPanel, Action, Icon, open, openCommandPreferences } from '@raycast/api';
+import CreateStepForm from '../createStepForm';
 
 interface StepActionsTypes {
   url: string;
@@ -12,6 +13,11 @@ export default function StepActions(props: StepActionsTypes) {
       <ActionPanel.Section>
         <Action.OpenInBrowser url={url} />
         <Action.CopyToClipboard content={url} shortcut={{ modifiers: ['cmd'], key: 'enter' }} />
+        <Action.Push
+          title="Edit step"
+          target={<CreateStepForm {...props} />}
+          shortcut={{ modifiers: ['opt'], key: 'enter' }}
+        />
         <Action
           title="Open Command Preferences"
           onAction={openCommandPreferences}
