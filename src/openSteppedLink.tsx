@@ -20,7 +20,6 @@ export default function OpenSteppedLink() {
 
   useEffect(() => {
     setIsLoading(false);
-
     console.log('search steps', Object.keys(currentSearchSteps).length);
   }, [currentSearchSteps]);
 
