@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { List } from '@raycast/api';
 
 import mockedRoutes from './steps.mocked.json';
+import configRoutes from './step-url.config.json';
 
 import getPreferences from './helpers/preferences';
 
@@ -12,12 +13,14 @@ import useSteppedLinksSearch from './hooks/useSteppedLinksSearch';
 
 export default function OpenSteppedLink() {
   const preferences = useMemo(() => getPreferences(), []);
-  const [isLoading, setIsLoading] = useState(false);
-  const { currentSearchSteps, peformSearch } = useSteppedLinksSearch(mockedRoutes);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { currentSearchSteps = {}, peformSearch } = useSteppedLinksSearch();
   const { searchSteps, namesFound, stepsTraveled } = currentSearchSteps;
 
   useEffect(() => {
     setIsLoading(false);
+    console.log('search steps', Object.keys(currentSearchSteps).length);
   }, [currentSearchSteps]);
 
   const searchForSteps = (ev: string) => {
@@ -34,11 +37,12 @@ export default function OpenSteppedLink() {
       throttle
       isLoading={isLoading}
     >
-      {searchSteps.length > 0 ? (
-        <StepsList steps={searchSteps} traveled={namesFound} />
-      ) : (
-        <EmptyView stepsTraveled={stepsTraveled} />
-      )}
+      {searchSteps &&
+        (searchSteps?.length > 0 ? (
+          <StepsList steps={searchSteps} traveled={namesFound} />
+        ) : (
+          <EmptyView stepsTraveled={stepsTraveled} />
+        ))}
     </List>
   );
 }

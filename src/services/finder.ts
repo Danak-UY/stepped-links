@@ -6,10 +6,10 @@ import { runAppleScript } from 'run-applescript';
 import { objToJson, jsonToObj } from '../helpers/parser';
 
 export default class Finder {
-  static async chooseFile(): Promise<string> {
+  static async chooseFile(type: string): Promise<string> {
     console.log('chooseFile');
     const appleScript = `
-      set chosenFile to choose file with prompt "Elije una carpeta" of type "public.json"
+      set chosenFile to choose file with prompt "Elije una carpeta" of type "${type}"
       return POSIX path of chosenFile
     `;
 
@@ -31,7 +31,7 @@ export default class Finder {
   }
 
   static async saveFile(fileName: string, path: string, data: object) {
-    console.log('saveFile', fileName, path, data);
+    console.log('saveFile', fileName, path);
     const file = join(path, `${fileName}.json`);
     await writeFile(file, objToJson(data));
   }
