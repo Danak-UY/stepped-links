@@ -1,28 +1,39 @@
+import { useMemo } from 'react';
 import { ActionPanel, Action, Icon, open, openCommandPreferences } from '@raycast/api';
+
+import getPreferences from '../helpers/preferences';
+import { mergeUrl } from '../helpers/url';
 import CreateStepForm from '../createStepForm';
 
 interface StepActionsTypes {
   url: string;
+  search: string;
   name: string;
+  query: string;
+  path: string;
 }
 
 export default function StepActions(props: StepActionsTypes) {
-  const { url, name } = props;
+  const { url, search, query } = props;
+  const preferences = useMemo(() => getPreferences(), []);
+  const finalUrl = mergeUrl((query && search) ?? url, query, preferences.queryWildcard);
+
   return (
     <ActionPanel>
       <ActionPanel.Section>
-        <Action.OpenInBrowser url={url} />
-        <Action.CopyToClipboard content={url} shortcut={{ modifiers: ['cmd'], key: 'enter' }} />
+        <Action.OpenInBrowser url={finalUrl} />
+        <Action.CopyToClipboard content={finalUrl} shortcut={{ modifiers: ['cmd'], key: 'c' }} />
         <Action.Push
           title="Edit step"
           target={<CreateStepForm {...props} />}
-          shortcut={{ modifiers: ['opt'], key: 'enter' }}
+          icon={Icon.Pencil}
+          shortcut={{ modifiers: ['cmd'], key: 'e' }}
         />
         <Action
           title="Open Command Preferences"
           onAction={openCommandPreferences}
           icon={Icon.Cog}
-          shortcut={{ modifiers: ['cmd'], key: 'p' }}
+          shortcut={{ modifiers: ['opt'], key: 'p' }}
         />
       </ActionPanel.Section>
       <ActionPanel.Submenu
@@ -32,27 +43,27 @@ export default function StepActions(props: StepActionsTypes) {
       >
         <Action
           title="Open in Chrome"
-          onAction={() => open(url, 'org.google.chrome')}
+          onAction={() => open(finalUrl, 'org.google.chrome')}
           shortcut={{ modifiers: ['cmd'], key: 'g' }}
         />
         <Action
           title="Open in Firefox"
-          onAction={() => open(url, 'org.mozilla.firefox')}
+          onAction={() => open(finalUrl, 'org.mozilla.firefox')}
           shortcut={{ modifiers: ['cmd'], key: 'f' }}
         />
         <Action
           title="Open in Edge"
-          onAction={() => open(url, 'com.microsoft.edgemac')}
+          onAction={() => open(finalUrl, 'com.microsoft.edgemac')}
           shortcut={{ modifiers: ['cmd'], key: 'e' }}
         />
         <Action
           title="Open in Safari"
-          onAction={() => open(url, 'com.apple.Safari')}
+          onAction={() => open(finalUrl, 'com.apple.Safari')}
           shortcut={{ modifiers: ['cmd'], key: 's' }}
         />
         <Action
           title="Open in Brave"
-          onAction={() => open(url, 'com.brave.Browser')}
+          onAction={() => open(finalUrl, 'com.brave.Browser')}
           shortcut={{ modifiers: ['cmd'], key: 'b' }}
         />
       </ActionPanel.Submenu>

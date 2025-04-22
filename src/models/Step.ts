@@ -1,11 +1,10 @@
-import StepTypes from '../types/Step';
+import type { StepTypes } from '../types/Step';
+import type { Route, RouteStep } from '../types/Route';
+import { URL, NAME, SEARCH } from '../types/Keys';
 
 import { Icon } from '@raycast/api';
 
-// interface StepConstructor {
-//   step: string;
-//   data: object;
-// }
+import { objectHasKey } from '../helpers/validator';
 
 export default class Step implements StepTypes {
   title: string;
@@ -14,20 +13,21 @@ export default class Step implements StepTypes {
   combo: string[];
   hasSearch: boolean;
   icon: string;
-  // step: string;
+  step: string;
   insideSteps: number;
 
-  constructor(step: string | null, data: object | string | string[]) {
+  constructor(step: string | null, data: RouteStep) {
     this.title = this.buildTitle(step, data) ?? 'Class empty';
     this.subtitle = this.buildSubtitle(step, data);
     this.url = this.buildUrl(data);
     this.combo = [];
-    this.hasSearch = this.hasSearchLink(data);
+    this.hasSearch = this.hasSearchLink(data as Record<string, any>);
     this.icon = this.buildIcon(data);
-    this.insideSteps = this.countInsideSteps(data);
+    this.step = step ?? '';
+    this.insideSteps = this.countInsideSteps(data as Record<string, any>);
   }
 
-  private buildTitle(step, data) {
+  private buildTitle(step: string | null, data: RouteStep): string {
     if (typeof data === 'string') {
       return step ?? data;
     }
@@ -36,10 +36,10 @@ export default class Step implements StepTypes {
       return `[ ${data.length} ]`;
     }
 
-    return step;
+    return step!;
   }
 
-  private buildSubtitle(step, data) {
+  private buildSubtitle(step: string | null, data: RouteStep): string {
     if (typeof data === 'string') {
       return step ? data : '';
     }
@@ -51,26 +51,26 @@ export default class Step implements StepTypes {
 
     const insideSteps: string[] = this.getInsideSteps(data);
     if (insideSteps.length === 0) {
-      return data._name ?? data._url;
+      return data[NAME] ?? data[URL];
     }
 
-    return `{ ${insideSteps.length} } - ${data._name}`;
+    return `{ ${insideSteps.length} } - ${data[NAME]}`;
   }
 
-  private buildUrl(data) {
+  private buildUrl(data: Route): string {
     if (typeof data === 'string') {
       return data;
     }
 
     if (Array.isArray(data)) {
       this.combo = data;
-      return;
+      return '';
     }
 
-    return data._url;
+    return objectHasKey(data!, URL) ? data![URL] : '';
   }
 
-  private buildIcon(data: object | string | string[]) {
+  private buildIcon(data: Route): string {
     if (typeof data === 'string') {
       return Icon.Link;
     }
@@ -79,31 +79,31 @@ export default class Step implements StepTypes {
       return Icon.Layers;
     }
 
-    if (this.hasInsideSteps(data)) {
+    if (this.hasInsideSteps(data!)) {
       return Icon.Folder;
     }
 
-    if (this.hasSearchLink(data)) {
+    if (this.hasSearchLink(data!)) {
       return Icon.MagnifyingGlass;
     }
 
-    if (this.hasUrlLink(data)) {
+    if (this.hasUrlLink(data!)) {
       return Icon.Link;
     }
 
     return Icon.Hashtag;
   }
 
-  private hasUrlLink(data: object) {
-    return Boolean(data._url);
+  private hasUrlLink(data: Record<string, any>): boolean {
+    return objectHasKey(data, URL) && Boolean(data[URL]);
   }
 
-  private hasSearchLink(data: object) {
-    return Boolean(data._search);
+  private hasSearchLink(data: Record<string, any>): boolean {
+    return objectHasKey(data, SEARCH) && Boolean(data[SEARCH]);
   }
 
   private getInsideSteps(data: object): string[] {
-    const CONFIG_KEYS = ['_url', '_name', '_search'];
+    const CONFIG_KEYS = [URL, NAME, SEARCH];
     const keys: string[] = Object.keys(data);
     return keys.filter((k) => !CONFIG_KEYS.includes(k));
   }

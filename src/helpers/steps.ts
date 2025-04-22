@@ -1,14 +1,22 @@
+import type { StepTypes } from '../types/Step';
+import type { Route } from '../types/Route';
+import type { StepInterface } from '../types/StepJson';
+import type { SearchSteps } from '../types/Search';
+import { NAME } from '../types/Keys';
+
+import { merge } from 'lodash';
+import { Icon, Toast, LocalStorage } from '@raycast/api';
+
 import Step from '../models/Step';
-import StepTypes from '../types/Step';
+import Storage from '../services/storage';
+import Feedback from '../services/feedback';
 
-import { Icon } from '@raycast/api';
-
-export function getFinalStep(routes: object, steps: string[] = []) {
+export const getFinalStep = (routes: object, steps: string[] = []): SearchSteps => {
   if (steps.length === 0) {
     return routes;
   }
 
-  let lastRoute: object | string | string[] | undefined = routes;
+  let lastRoute: Route = routes;
   let lastStep = '';
   const stepsTraveled = [];
   const namesFound: string[] = [];
@@ -18,10 +26,10 @@ export function getFinalStep(routes: object, steps: string[] = []) {
       break;
     }
 
-    const stepRoute: object | string | string[] | undefined = lastRoute[step];
+    const stepRoute = (lastRoute as Record<string, Route>)[step] as Route;
 
-    if (stepRoute?._name) {
-      namesFound.push(stepRoute._name);
+    if (stepRoute && typeof stepRoute === 'object' && stepRoute !== null && NAME in stepRoute) {
+      namesFound.push(stepRoute[NAME] as string);
     }
 
     stepsTraveled.push(step);
@@ -30,9 +38,9 @@ export function getFinalStep(routes: object, steps: string[] = []) {
   }
 
   return { lastRoute, namesFound, lastStep, stepsTraveled };
-}
+};
 
-export function parseSteps(steps: object | string | string[] | undefined = {}): StepTypes[] {
+export const parseSteps = (steps: Route = {}): StepTypes[] => {
   if (!steps) {
     return [];
   }
@@ -43,32 +51,65 @@ export function parseSteps(steps: object | string | string[] | undefined = {}): 
 
   const { _url, _search, _name, ...restSteps } = steps;
 
-  // console.log('steps', steps, restSteps);
-
-  const rootStep = buildRootStep(_url, _search, _name, restSteps);
+  const rootStep = buildRootStep(_url, _search, _name);
   const parsedSteps = Object.entries(restSteps)
     .sort()
     .map(([step, data]) => new Step(step, data));
 
   return rootStep ? [rootStep, ...parsedSteps] : parsedSteps;
-}
+};
 
-function buildRootStep(url, search, name, restSteps) {
+export const buildRootStep = (url: string, search: string, name: string, restSteps?: string[]) => {
   if (!url && !search && !name) {
     return;
   }
 
-  const getInsideSteps = (data: object): string[] => {
-    const CONFIG_KEYS = ['_url', '_name', '_search'];
-    const keys: string[] = Object.keys(data);
-    return keys.filter((k) => !CONFIG_KEYS.includes(k));
-  };
-
   return {
-    title: name ?? url,
+    title: name ?? url ?? '',
     subtitle: name ? url : '',
     url: url,
     hasSearch: Boolean(search),
+    search: search,
     icon: Icon.BullsEye,
   };
-}
+};
+
+export const buildPath = (path: string, content: any) => {
+  return {
+    [path]: content,
+  };
+};
+
+export const buildStepPath = ({ path, url, name, search }: StepInterface) => {
+  const pathArr = path.split(' ').filter(Boolean).reverse();
+  const step = {
+    _url: url,
+    _name: name,
+    _search: search,
+  };
+
+  let obj = {};
+
+  for (const onePath of pathArr) {
+    obj = Object.keys(obj).length ? buildPath(onePath, obj) : buildPath(onePath, step);
+  }
+
+  return obj;
+};
+
+export const addStepToStorage = async (step: StepInterface) => {
+  try {
+    Feedback.toast('Saving new step', Toast.Style.Animated);
+    const stepPath = buildStepPath(step);
+
+    const stepsInfo = await Storage.getItem('steppedRoutes', {});
+
+    merge(stepsInfo, stepPath);
+    await Storage.setItem('steppedRoutes', stepsInfo as LocalStorage.Value);
+
+    Feedback.toast('Step created', Toast.Style.Success);
+  } catch (e) {
+    console.error(e);
+    Feedback.toast('There was a problem saving step', Toast.Style.Failure);
+  }
+};

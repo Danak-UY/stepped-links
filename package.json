@@ -29,6 +29,30 @@
       "mode": "no-view"
     },
     {
+      "name": "importStepsConfigBrowserBookmarks",
+      "title": "Import from Browser Bookmarks",
+      "description": "Import html file with browser bookmarks as stepped links",
+      "mode": "no-view"
+    },
+    {
+      "name": "exportStepsConfigBrowserBookmarks",
+      "title": "Export as Browser Bookmarks",
+      "description": "Export html file with stepped links as browser bookmarks",
+      "mode": "no-view"
+    },
+    {
+      "name": "importStepsConfigQuickLinks",
+      "title": "Import from Quick Links",
+      "description": "Import html file with quick links as stepped links",
+      "mode": "no-view"
+    },
+    {
+      "name": "exportStepsConfigQuickLinks",
+      "title": "Export as Quick Links",
+      "description": "Export json file with stepped links as quick links",
+      "mode": "no-view"
+    },
+    {
       "name": "openSteppedLink",
       "title": "Search stepped link",
       "description": "Search and open a link",
@@ -68,19 +92,22 @@
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.38.3",
-    "@raycast/utils": "^1.1.0",
+    "@raycast/api": "^1.96.0",
+    "@raycast/utils": "^1.17.0",
     "lodash": "^4.17.21",
     "raycast-toolkit": "^1.0.6",
     "run-applescript": "^6.0.0"
   },
   "devDependencies": {
+    "@raycast/eslint-config": "^2.0.4",
+    "@types/lodash": "^4.17.16",
+    "@types/node": "22.13.10",
+    "@types/react": "19.0.10",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "prettier": "^2.5.1",
-    "typescript": "^4.4.3"
+    "eslint": "^9.22.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
   },
   "scripts": {
     "build": "ray build -e dist",

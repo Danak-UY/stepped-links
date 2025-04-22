@@ -13,5 +13,5 @@ interface StepIcon {
  */
 
 export default function StepIcon({ type }: StepIcon) {
-  return Icon[type] ?? Icon.Alarm;
+  return (Icon as Record<string, Icon>)[type] ?? Icon.Alarm;
 }
