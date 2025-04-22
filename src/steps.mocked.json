@@ -1,4 +1,8 @@
 {
+  "_combos": {},
+  "_templates": {
+    "gh": {}
+  },
   "gh": {
     "_name": "GitHub",
     "_url": "https://github.com",

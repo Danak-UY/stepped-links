@@ -1,25 +1,23 @@
-import { useState, useMemo, useEffect, useReducer } from 'react';
+import type { UserSearch, SearchSteps } from '../types/Search';
 
-import { getFinalStep } from '../helpers/steps';
+import { useState, useMemo, useEffect } from 'react';
 
-import StepTypes from '../types/Step';
-import { parseSteps } from '../helpers/steps';
-
+import { getFinalStep, parseSteps } from '../helpers/steps';
 import Storage from '../services/storage';
 
-async function loadSteps(callback) {
+async function loadSteps(callback: (steps: any) => void) {
   const stepsInfo = await Storage.getItem('steppedRoutes', {});
-  console.log('loadSteps -->', Object.keys(stepsInfo).length);
   callback(stepsInfo);
 }
 
-type UserSearch = {
-  steppedRoute?: string[];
-  query?: string;
-};
-
 export default function useSteppedLinksSearch() {
   const [stepsInfo, setStepsInfo] = useState({});
+  const [currentSearchSteps, setCurrentSearchSteps] = useState<SearchSteps>({});
+  const [currentQuery, setCurrentQuery] = useState<string>('');
+
+  const initialRotues = useMemo(() => {
+    return { searchSteps: parseSteps(stepsInfo) };
+  }, [stepsInfo]);
 
   useEffect(() => {
     loadSteps((steps) => {
@@ -28,25 +26,9 @@ export default function useSteppedLinksSearch() {
     });
   }, []);
 
-  const initialRotues = useMemo(() => {
-    console.log('parse routes calculated -->', Object.keys(stepsInfo).length);
-    return { searchSteps: parseSteps(stepsInfo) };
-  }, [stepsInfo]);
-
-  const [currentSearchSteps, setCurrentSearchSteps] = useState<StepTypes[]>();
-
-  // useEffect(() => {
-  //   // setCurrentSearchSteps(initialRotues);
-  //   console.log('update current routes calculated -->', Object.keys(stepsInfo).length);
-  //   setCurrentSearchSteps({ searchSteps: parseSteps(stepsInfo) });
-  // }, [stepsInfo]);
-
   const peformSearch = ({ steppedRoute, query }: UserSearch) => {
     if (steppedRoute?.length > 0) {
-      console.log('user search', steppedRoute, query);
-
       const { lastRoute, namesFound, stepsTraveled } = getFinalStep(stepsInfo, steppedRoute);
-      console.log('step found', currentSearchSteps.lastRoute);
 
       const newState = {
         searchSteps: parseSteps(lastRoute),
@@ -58,7 +40,11 @@ export default function useSteppedLinksSearch() {
     } else {
       setCurrentSearchSteps(initialRotues);
     }
+
+    if (query !== currentQuery) {
+      setCurrentQuery(query?.trim() ?? '');
+    }
   };
 
-  return { currentSearchSteps, peformSearch };
+  return { currentSearchSteps, currentQuery, peformSearch };
 }

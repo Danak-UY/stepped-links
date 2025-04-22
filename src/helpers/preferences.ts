@@ -1,4 +1,4 @@
-import { Application, getPreferenceValues } from "@raycast/api";
+import { Application, getPreferenceValues } from '@raycast/api';
 
 interface Preferences {
   querySeparators: string;

@@ -1,52 +1,11 @@
-import { Form, ActionPanel, Action, showToast, Toast } from '@raycast/api';
+import type { StepInterface } from './types/StepJson';
+
 import { useState, useEffect } from 'react';
+import { Form, ActionPanel, Action } from '@raycast/api';
 
-import Storage from './services/storage';
-import { merge } from 'lodash';
-import Feedback from './services/feedback';
+import { addStepToStorage } from './helpers/steps';
 
-const buildPath = (path, content) => {
-  return {
-    [path]: content,
-  };
-};
-
-const buildStepPath = ({ path, url, name, search }) => {
-  const pathArr = path.split(' ').filter(Boolean).reverse();
-  const step = {
-    _url: url,
-    _name: name,
-    _search: search,
-  };
-
-  let obj = {};
-
-  for (const onePath of pathArr) {
-    obj = Object.keys(obj).length ? buildPath(onePath, obj) : buildPath(onePath, step);
-  }
-
-  return obj;
-};
-
-const addStepToStorage = async (step) => {
-  try {
-    Feedback.toast('Saving new step', Toast.Style.Animated);
-    const stepPath = buildStepPath(step);
-    // console.log('file', stepPath);
-
-    const stepsInfo = await Storage.getItem('steppedRoutes', {});
-
-    merge(stepsInfo, stepPath);
-    await Storage.setItem('steppedRoutes', stepsInfo);
-
-    Feedback.toast('Step created', Toast.Style.Success);
-  } catch (e) {
-    console.error(e);
-    Feedback.toast('There was a problem saving step', Toast.Style.Failure);
-  }
-};
-
-export default function CreateStepForm({ path, name, url, search }) {
+export default function CreateStepForm({ path, name, url, search }: StepInterface) {
   const [hasSearch, setHasSearch] = useState(Boolean(search));
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,7 +25,7 @@ export default function CreateStepForm({ path, name, url, search }) {
     });
   }, [path, name, url, search]);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values: StepInterface) => {
     setIsLoading(true);
     await addStepToStorage(values);
     setIsLoading(false);
@@ -81,6 +40,12 @@ export default function CreateStepForm({ path, name, url, search }) {
         </ActionPanel>
       }
     >
+      <Form.Dropdown id="emoji" title="Favorite Emoji" defaultValue="lol">
+        <Form.Dropdown.Item value="poop" title="Pile of poop" icon="💩" />
+        <Form.Dropdown.Item value="rocket" title="Rocket" icon="🚀" />
+        <Form.Dropdown.Item value="lol" title="Rolling on the floor laughing face" icon="🤣" />
+      </Form.Dropdown>
+
       <Form.TextField
         id="path"
         autoFocus

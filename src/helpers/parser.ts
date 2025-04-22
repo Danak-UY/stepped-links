@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function objToJson(data: any, indentation = 2): string {
+export function objToJson(data: unknown, indentation = 2): string {
   return JSON.stringify(data, null, indentation);
 }
 
