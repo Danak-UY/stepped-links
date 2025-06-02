@@ -19,11 +19,10 @@ The extension provides the following commands:
 
 The extension offers the following preferences to customize its behavior:
 
-- **Separators**: Defines the characters used to separate steps in a query (default: `-`).
-- **Query wildcard**: Specifies the wildcard used to replace the query in a URL (default: `{{q}}`).
-- **Default browser**: Sets the default browser to open the final link.
-- **Default config app**: Sets the default application to open and edit the configuration file.
-
+- **querySeparators**: Defines the characters used to separate steps in a query (default: `-`).
+- **queryWildcard**: Specifies the wildcard used to replace the query in a URL (default: `{{q}}`).
+- **defaultBrowser**: Sets the default browser to open the final link.
+- **defaultConfigApp**: Sets the default application to open and edit the configuration file.
 ## Contributing
 
 Contributions to Stepped Links are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request on the project's GitHub repository.
