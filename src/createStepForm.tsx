@@ -5,6 +5,15 @@ import { Form, ActionPanel, Action } from '@raycast/api';
 
 import { addStepToStorage } from './helpers/steps';
 
+/**
+ * Render a form for creating a new step with an emoji selector, required fields, and an optional search field.
+ *
+ * @param path - Initial value for the "Path" field.
+ * @param name - Initial value for the "Name" field.
+ * @param url - Initial value for the "Url" field.
+ * @param search - Initial value for the "Search" field; when present the form's "Add search" checkbox is checked and the search field is shown.
+ * @returns The React element representing the create-step form.
+ */
 export default function CreateStepForm({ path, name, url, search }: StepInterface) {
   const [hasSearch, setHasSearch] = useState(Boolean(search));
   const [isLoading, setIsLoading] = useState(false);

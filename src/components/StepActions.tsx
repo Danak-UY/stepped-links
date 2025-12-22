@@ -13,6 +13,15 @@ interface StepActionsTypes {
   path: string;
 }
 
+/**
+ * Render an action panel offering browser, clipboard, edit, and preferences actions for a step.
+ *
+ * @param props - Component props.
+ * @param props.url - Fallback base URL used when `query` and `search` are not combined.
+ * @param props.search - Search string used as the base when `query` is present.
+ * @param props.query - Query string merged into the base URL; may replace a wildcard from preferences.
+ * @returns The ActionPanel JSX element containing the step's actions.
+ */
 export default function StepActions(props: StepActionsTypes) {
   const { url, search, query } = props;
   const preferences = useMemo(() => getPreferences(), []);

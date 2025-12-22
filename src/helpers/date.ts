@@ -1,3 +1,8 @@
+/**
+ * Produce a timestamp string for the current local date and time in an ISO-like layout.
+ *
+ * @returns A string representing the current local date and time in the format `YYYY-MM-DDThh-mm-ss` (note: the time portion uses hyphens between hours, minutes, and seconds). 
+ */
 export function currentDateISO() {
   const date = new Date();
 

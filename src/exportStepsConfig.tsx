@@ -5,6 +5,14 @@ import { chooseFolder, saveFile } from './controller/finder';
 
 import { currentDateISO } from './helpers/date';
 
+/**
+ * Export stored stepped routes to a user-selected folder as a dated config file.
+ *
+ * If the user selects a folder, retrieves `steppedRoutes` from storage and, if present,
+ * writes them to `stepped-links.<ISO date>.config` in the chosen folder. Shows a HUD message
+ * indicating success, or a HUD message if there are no links to export. If no folder is selected,
+ * shows a HUD message indicating the selection was canceled.
+ */
 export default async function ExportStepsConfig() {
   showToast({
     style: Toast.Style.Animated,

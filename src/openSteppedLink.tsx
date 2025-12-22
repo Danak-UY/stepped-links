@@ -8,6 +8,14 @@ import EmptyView from './components/EmptyView';
 
 import useSteppedLinksSearch from './hooks/useSteppedLinksSearch';
 
+/**
+ * Renders a searchable list UI for finding and displaying step-by-step links.
+ *
+ * The component displays either a populated steps list or an empty view depending on search results.
+ * User input in the search bar is parsed by the application's `querySeparators` preference into a route and an optional query, then dispatched to the stepped-link search handler.
+ *
+ * @returns A JSX element containing the search list and the corresponding results view
+ */
 export default function OpenSteppedLink() {
   const preferences = useMemo(() => getPreferences(), []);
   const [isLoading, setIsLoading] = useState(true);
