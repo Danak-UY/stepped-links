@@ -40,12 +40,6 @@ export default function CreateStepForm({ path, name, url, search }: StepInterfac
         </ActionPanel>
       }
     >
-      <Form.Dropdown id="emoji" title="Favorite Emoji" defaultValue="lol">
-        <Form.Dropdown.Item value="poop" title="Pile of poop" icon="💩" />
-        <Form.Dropdown.Item value="rocket" title="Rocket" icon="🚀" />
-        <Form.Dropdown.Item value="lol" title="Rolling on the floor laughing face" icon="🤣" />
-      </Form.Dropdown>
-
       <Form.TextField
         id="path"
         autoFocus

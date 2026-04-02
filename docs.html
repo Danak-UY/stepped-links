@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stepped Links - Documentación</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: #f5f5f7;
+      }
+
+      h1 {
+        font-size: 2.5em;
+        color: #1d1d1f;
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        font-size: 1.8em;
+        color: #1d1d1f;
+        margin: 40px 0 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #0071e3;
+      }
+
+      h3 {
+        font-size: 1.3em;
+        color: #1d1d1f;
+        margin: 25px 0 15px;
+      }
+
+      p {
+        margin-bottom: 15px;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        margin-left: 10px;
+      }
+
+      .badge-active {
+        background: #34c759;
+        color: white;
+      }
+
+      .badge-pending {
+        background: #ff9500;
+        color: white;
+      }
+
+      .intro {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+      }
+
+      .intro p {
+        font-size: 1.1em;
+        color: #666;
+      }
+
+      .logo {
+        font-size: 3em;
+        margin-bottom: 20px;
+      }
+
+      .section {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 25px;
+      }
+
+      .commands-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 15px;
+      }
+
+      .command-card {
+        background: #f5f5f7;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #0071e3;
+      }
+
+      .command-card h4 {
+        color: #1d1d1f;
+        margin-bottom: 8px;
+      }
+
+      .command-card p {
+        font-size: 0.9em;
+        color: #666;
+        margin: 0;
+      }
+
+      code {
+        background: #f0f0f0;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'SF Mono', Monaco, monospace;
+        font-size: 0.9em;
+      }
+
+      pre {
+        background: #1d1d1f;
+        color: #f5f5f7;
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 15px 0;
+        font-size: 0.85em;
+        line-height: 1.5;
+      }
+
+      pre code {
+        background: none;
+        padding: 0;
+        color: inherit;
+      }
+
+      .data-structure {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .tree-node {
+        padding-left: 30px;
+        position: relative;
+      }
+
+      .tree-node::before {
+        content: '📁';
+        position: absolute;
+        left: 0;
+      }
+
+      .tree-node.key::before {
+        content: '🔑';
+      }
+
+      .tree-node.value::before {
+        content: '🔗';
+      }
+
+      .tree-node.search::before {
+        content: '🔍';
+      }
+
+      .tree-key {
+        color: #0071e3;
+        font-weight: 600;
+      }
+
+      .tree-value {
+        color: #34c759;
+        font-family: monospace;
+      }
+
+      .flow-diagram {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .flow-step {
+        background: #0071e3;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+
+      .flow-arrow {
+        font-size: 1.5em;
+        color: #999;
+      }
+
+      .icon-legend {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .icon-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background: #f5f5f7;
+        border-radius: 6px;
+      }
+
+      .icon-item span:first-child {
+        font-size: 1.5em;
+      }
+
+      .example-box {
+        background: #e8f4fd;
+        border-left: 4px solid #0071e3;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .example-box strong {
+        color: #0071e3;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 15px 0;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 12px 15px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      th {
+        background: #f5f5f7;
+        font-weight: 600;
+      }
+
+      tr:hover {
+        background: #f9f9f9;
+      }
+
+      .features-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+      }
+
+      .feature-card {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .feature-card .icon {
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔗 Stepped Links</h1>
+
+    <div class="intro">
+      <p>
+        <strong>Stepped Links</strong> es una extensión para
+        <a href="https://raycast.com" style="color: #0071e3">Raycast</a> que permite organizar y acceder rápidamente a
+        enlaces mediante rutas jerárquicas con soporte para búsqueda integrada.
+      </p>
+      <p>
+        Imagina guardar un enlace como <code>docs → api → components → Button</code> y acceder a él simplemente
+        escribiendo <code>docs api components Button</code>.
+      </p>
+    </div>
+
+    <h2>📦 Comandos Disponibles</h2>
+    <div class="section">
+      <div class="commands-grid">
+        <div class="command-card">
+          <h4>🔍 Search Stepped Link <span class="badge badge-active">Activo</span></h4>
+          <p>Buscar y abrir enlaces mediante rutas jerárquicas</p>
+        </div>
+        <div class="command-card">
+          <h4>➕ Create New Step <span class="badge badge-active">Activo</span></h4>
+          <p>Crear nuevos pasos en la estructura jerárquica</p>
+        </div>
+        <div class="command-card">
+          <h4>📥 Import JSON <span class="badge badge-active">Activo</span></h4>
+          <p>Importar configuración desde archivo JSON</p>
+        </div>
+        <div class="command-card">
+          <h4>📤 Export JSON <span class="badge badge-active">Activo</span></h4>
+          <p>Exportar configuración a archivo JSON</p>
+        </div>
+        <div class="command-card">
+          <h4>🌐 Import Bookmarks <span class="badge badge-pending">Pendiente</span></h4>
+          <p>Importar desde marcadores del navegador</p>
+        </div>
+        <div class="command-card">
+          <h4>🌐 Export Bookmarks <span class="badge badge-pending">Pendiente</span></h4>
+          <p>Exportar como marcadores de navegador</p>
+        </div>
+        <div class="command-card">
+          <h4>⚡ Import Quick Links <span class="badge badge-pending">Pendiente</span></h4>
+          <p>Importar desde Quick Links de Raycast</p>
+        </div>
+        <div class="command-card">
+          <h4>⚡ Export Quick Links <span class="badge badge-pending">Pendiente</span></h4>
+          <p>Exportar como Quick Links de Raycast</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>⚙️ Configuración</h2>
+    <div class="section">
+      <table>
+        <tr>
+          <th>Parámetro</th>
+          <th>Descripción</th>
+          <th>Valor por defecto</th>
+        </tr>
+        <tr>
+          <td><code>Separators</code></td>
+          <td>Caracteres que separan la ruta de la búsqueda</td>
+          <td><code>-</code></td>
+        </tr>
+        <tr>
+          <td><code>Query wildcard</code></td>
+          <td>Marcador de posición para la búsqueda</td>
+          <td><code>{{q}}</code></td>
+        </tr>
+        <tr>
+          <td><code>Default browser</code></td>
+          <td>Navegador para abrir los enlaces</td>
+          <td>Safari</td>
+        </tr>
+        <tr>
+          <td><code>Default config app</code></td>
+          <td>App para editar archivos de configuración</td>
+          <td>—</td>
+        </tr>
+      </table>
+    </div>
+
+    <h2>🏗️ Estructura de Datos</h2>
+    <div class="section">
+      <p>
+        Los enlaces se almacenan en LocalStorage bajo la clave <code>steppedRoutes</code> con una estructura jerárquica
+        anidada:
+      </p>
+
+      <pre><code>{
+  "raycast": {
+    "_url": "https://raycast.com",
+    "_name": "Raycast",
+    "_search": "https://raycast.com/search?q={{q}}",
+    "docs": {
+      "_url": "https://developers.raycast.com",
+      "_name": "Documentation",
+      "api": {
+        "_url": "https://developers.raycast.com/api-reference",
+        "_name": "API Reference"
+      },
+      "guides": {
+        "_url": "https://developers.raycast.com/guides",
+        "_name": "Guides"
+      }
+    },
+    "store": {
+      "_url": "https://www.raycast.com/store",
+      "_name": "Store"
+    }
+  },
+  "github": {
+    "_url": "https://github.com",
+    "_name": "GitHub",
+    "_search": "https://github.com/search?q={{q}}"
+  }
+}</code></pre>
+
+      <h3>Convenciones de claves:</h3>
+      <div class="icon-legend">
+        <div class="icon-item">
+          <span>🔑</span>
+          <span><code>_url</code> — URL del enlace</span>
+        </div>
+        <div class="icon-item">
+          <span>🏷️</span>
+          <span><code>_name</code> — Nombre para mostrar</span>
+        </div>
+        <div class="icon-item">
+          <span>🔍</span>
+          <span><code>_search</code> — URL de búsqueda</span>
+        </div>
+        <div class="icon-item">
+          <span>📁</span>
+          <span><code>[other]</code> — Sub-rutas anidadas</span>
+        </div>
+      </div>
+    </div>
+
+    <h2>🔄 Cómo Funciona</h2>
+    <div class="section">
+      <h3>Búsqueda y Navegación</h3>
+
+      <div class="flow-diagram">
+        <div class="flow-step">1. Usuario escribe</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">2. Parsear ruta</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">3. Buscar en datos</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">4. Renderizar</div>
+      </div>
+
+      <h3>Formato de Consulta</h3>
+      <p>El formato de búsqueda sigue este patrón:</p>
+
+      <pre><code>{ruta-partes} {separador} {búsqueda}
+        ↓          ↓          ↓
+    "raycast docs api - button"</code></pre>
+
+      <div class="example-box">
+        <strong>Ejemplo:</strong> Escribes <code>raycast docs api - hooks</code><br />
+        → Navega a <code>raycast > docs > api</code><br />
+        → Reemplaza <code>{{q}}</code> con <code>hooks</code><br />
+        → Muestra resultados de búsqueda
+      </div>
+
+      <h3>Iconos por Tipo</h3>
+      <div class="icon-legend">
+        <div class="icon-item"><span>🔗</span><span>Icon.Link — Enlace directo</span></div>
+        <div class="icon-item"><span>📂</span><span>Icon.Folder — Tiene sub-pasos</span></div>
+        <div class="icon-item"><span>🔍</span><span>Icon.MagnifyingGlass — Tiene búsqueda</span></div>
+        <div class="icon-item"><span>📚</span><span>Icon.Layers — Array/combo</span></div>
+        <div class="icon-item"><span>#️⃣</span><span>Icon.Hashtag — Otro</span></div>
+        <div class="icon-item"><span>🎯</span><span>Icon.BullsEye — Paso raíz</span></div>
+      </div>
+    </div>
+
+    <h2>🛠️ Arquitectura</h2>
+    <div class="section">
+      <table>
+        <tr>
+          <th>Directorio</th>
+          <th>Propósito</th>
+          <th>Ejemplos</th>
+        </tr>
+        <tr>
+          <td><code>components/</code></td>
+          <td>Componentes React de UI</td>
+          <td>StepsList, StepItem, StepActions</td>
+        </tr>
+        <tr>
+          <td><code>controller/</code></td>
+          <td>Coordinación de lógica de negocio</td>
+          <td>finder, url</td>
+        </tr>
+        <tr>
+          <td><code>helpers/</code></td>
+          <td>Funciones utilitarias puras</td>
+          <td>parser, validator, url, steps</td>
+        </tr>
+        <tr>
+          <td><code>hooks/</code></td>
+          <td>Hooks personalizados de React</td>
+          <td>useSteppedLinksSearch</td>
+        </tr>
+        <tr>
+          <td><code>models/</code></td>
+          <td>Clases de encapsulamiento de datos</td>
+          <td>Step</td>
+        </tr>
+        <tr>
+          <td><code>services/</code></td>
+          <td>Código con efectos secundarios</td>
+          <td>storage, feedback, finder</td>
+        </tr>
+        <tr>
+          <td><code>types/</code></td>
+          <td>Definiciones de tipos TypeScript</td>
+          <td>Step, Route, Search</td>
+        </tr>
+      </table>
+    </div>
+
+    <h2>✨ Características</h2>
+    <div class="section">
+      <div class="features-list">
+        <div class="feature-card">
+          <div class="icon">🏗️</div>
+          <h4>Jerárquico</h4>
+          <p>Estructura de carpetas infinita para organizar enlaces</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🔍</div>
+          <h4>Búsqueda Integrada</h4>
+          <p>Usa <code>{{q}}</code> para búsquedas dentro de sitios</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">📤</div>
+          <h4>Import/Export</h4>
+          <p>Respaldar y restaurar configuración en JSON</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🌐</div>
+          <h4>Multi-Navegador</h4>
+          <p>Abre enlaces en Chrome, Firefox, Safari, Edge o Brave</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>🎯 Ejemplo de Uso</h2>
+    <div class="section">
+      <p>Supongamos que configuraste esta estructura:</p>
+
+      <pre><code>{
+  "work": {
+    "_url": "https://work.example.com",
+    "_name": "Trabajo",
+    "jira": {
+      "_url": "https://company.atlassian.net",
+      "_name": "Jira",
+      "_search": "https://company.atlassian.net/browse/{{q}}"
+    },
+    "confluence": {
+      "_url": "https://company.atlassian.net/wiki",
+      "_name": "Confluence"
+    }
+  }
+}</code></pre>
+
+      <h3>Acciones posibles:</h3>
+      <table>
+        <tr>
+          <th>Input</th>
+          <th>Acción</th>
+        </tr>
+        <tr>
+          <td><code>work</code></td>
+          <td>Muestra "Trabajo" como enlace directo</td>
+        </tr>
+        <tr>
+          <td><code>work jira</code></td>
+          <td>Navega a Jira, muestra sub-pasos</td>
+        </tr>
+        <tr>
+          <td><code>work jira - PROJ-123</code></td>
+          <td>Busca "PROJ-123" en Jira</td>
+        </tr>
+        <tr>
+          <td><code>work confluence</code></td>
+          <td>Abre Confluence</td>
+        </tr>
+      </table>
+    </div>
+
+    <footer>
+      <p>Stepped Links • Extensión para Raycast • MIT License</p>
+    </footer>
+  </body>
+</html>
