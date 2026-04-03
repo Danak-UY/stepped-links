@@ -15,7 +15,7 @@ export default function useSteppedLinksSearch() {
   const [currentSearchSteps, setCurrentSearchSteps] = useState<SearchSteps>({});
   const [currentQuery, setCurrentQuery] = useState<string>('');
 
-  const initialRotues = useMemo(() => {
+  const initialRoutes = useMemo(() => {
     return { searchSteps: parseSteps(stepsInfo) };
   }, [stepsInfo]);
 
@@ -38,7 +38,7 @@ export default function useSteppedLinksSearch() {
 
       setCurrentSearchSteps(newState);
     } else {
-      setCurrentSearchSteps(initialRotues);
+      setCurrentSearchSteps(initialRoutes);
     }
 
     if (query !== currentQuery) {

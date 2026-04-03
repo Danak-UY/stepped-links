@@ -2,7 +2,7 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "stepped-links",
   "title": "Stepped Links",
-  "description": "",
+  "description": "Organize and access links via hierarchical routes with search support",
   "icon": "command-icon.png",
   "author": "Danak-MeLi",
   "categories": [
@@ -54,7 +54,7 @@
     },
     {
       "name": "openSteppedLink",
-      "title": "Search stepped link",
+      "title": "Search Stepped Link",
       "description": "Search and open a link",
       "mode": "view"
     }

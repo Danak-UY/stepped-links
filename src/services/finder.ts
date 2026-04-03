@@ -32,10 +32,15 @@ export default class Finder {
     await writeFile(file, objToJson(data));
   }
 
-  static async readFile(path: string): Promise<object> {
-    const file = await readFile(path, { encoding: 'utf8' });
-    const parsedFile = jsonToObj(file);
-    return parsedFile;
+  static async readFile(filePath: string): Promise<object> {
+    try {
+      const fileContent = await readFile(filePath, { encoding: 'utf8' });
+      const parsedFile = jsonToObj(fileContent);
+      return parsedFile;
+    } catch (error) {
+      console.error('Error reading file:', filePath, error);
+      throw error;
+    }
   }
 
   static showFileInFinder(path: string) {

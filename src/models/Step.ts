@@ -1,6 +1,6 @@
 import type { StepTypes } from '../types/Step';
 import type { Route, RouteStep } from '../types/Route';
-import { URL, NAME, SEARCH } from '../types/Keys';
+import { URL, NAME, SEARCH, CONFIG_KEYS } from '../types/Keys';
 
 import { Icon } from '@raycast/api';
 
@@ -21,10 +21,17 @@ export default class Step implements StepTypes {
     this.subtitle = this.buildSubtitle(step, data);
     this.url = this.buildUrl(data);
     this.combo = [];
-    this.hasSearch = this.hasSearchLink(data as Record<string, any>);
+    this.hasSearch = this.hasSearchLink(data);
     this.icon = this.buildIcon(data);
     this.step = step ?? '';
-    this.insideSteps = this.countInsideSteps(data as Record<string, any>);
+    this.insideSteps = this.countInsideSteps(data);
+  }
+
+  private asRecord(data: RouteStep | Route): Record<string, unknown> | undefined {
+    if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
+      return data as Record<string, unknown>;
+    }
+    return undefined;
   }
 
   private buildTitle(step: string | null, data: RouteStep): string {
@@ -49,12 +56,15 @@ export default class Step implements StepTypes {
       return `[ ${joined} ]`;
     }
 
-    const insideSteps: string[] = this.getInsideSteps(data);
+    const record = this.asRecord(data);
+    if (!record) return '';
+
+    const insideSteps: string[] = this.getInsideSteps(record);
     if (insideSteps.length === 0) {
-      return data[NAME] ?? data[URL];
+      return (record[NAME] as string) ?? (record[URL] as string) ?? '';
     }
 
-    return `{ ${insideSteps.length} } - ${data[NAME]}`;
+    return `{ ${insideSteps.length} } - ${record[NAME]}`;
   }
 
   private buildUrl(data: Route): string {
@@ -67,7 +77,10 @@ export default class Step implements StepTypes {
       return '';
     }
 
-    return objectHasKey(data!, URL) ? data![URL] : '';
+    const record = this.asRecord(data);
+    if (!record) return '';
+
+    return objectHasKey(record, URL) ? (record[URL] as string) : '';
   }
 
   private buildIcon(data: Route): string {
@@ -79,40 +92,56 @@ export default class Step implements StepTypes {
       return Icon.Layers;
     }
 
-    if (this.hasInsideSteps(data!)) {
+    const record = this.asRecord(data);
+    if (!record) return Icon.Hashtag;
+
+    if (this.hasInsideSteps(record)) {
       return Icon.Folder;
     }
 
-    if (this.hasSearchLink(data!)) {
+    if (this.hasSearchLinkInRecord(record)) {
       return Icon.MagnifyingGlass;
     }
 
-    if (this.hasUrlLink(data!)) {
+    if (this.hasUrlLinkInRecord(record)) {
       return Icon.Link;
     }
 
     return Icon.Hashtag;
   }
 
-  private hasUrlLink(data: Record<string, any>): boolean {
-    return objectHasKey(data, URL) && Boolean(data[URL]);
+  private hasUrlLink(data: RouteStep): boolean {
+    const record = this.asRecord(data);
+    if (!record) return false;
+    return objectHasKey(record, URL) && Boolean(record[URL]);
   }
 
-  private hasSearchLink(data: Record<string, any>): boolean {
-    return objectHasKey(data, SEARCH) && Boolean(data[SEARCH]);
+  private hasSearchLink(data: RouteStep): boolean {
+    const record = this.asRecord(data);
+    if (!record) return false;
+    return objectHasKey(record, SEARCH) && Boolean(record[SEARCH]);
+  }
+
+  private hasUrlLinkInRecord(record: Record<string, unknown>): boolean {
+    return objectHasKey(record, URL) && Boolean(record[URL]);
+  }
+
+  private hasSearchLinkInRecord(record: Record<string, unknown>): boolean {
+    return objectHasKey(record, SEARCH) && Boolean(record[SEARCH]);
   }
 
   private getInsideSteps(data: object): string[] {
-    const CONFIG_KEYS = [URL, NAME, SEARCH];
     const keys: string[] = Object.keys(data);
     return keys.filter((k) => !CONFIG_KEYS.includes(k));
   }
 
-  private countInsideSteps(data: object): number {
-    return this.getInsideSteps(data).length;
+  private countInsideSteps(data: RouteStep): number {
+    const record = this.asRecord(data);
+    if (!record) return 0;
+    return this.getInsideSteps(record).length;
   }
 
   private hasInsideSteps(data: object): boolean {
-    return this.countInsideSteps(data) > 0;
+    return this.countInsideSteps(data as RouteStep) > 0;
   }
 }
